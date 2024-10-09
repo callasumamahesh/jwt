@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 const users = [
   {
     username: 'admin',
-    password: '$2a$10$zQ1DZWItbgWBHVYZPftgLuoFTGvR5PU.KC3JkFNuV14DqRXUkVotC', // 'password123' hashed
+    password: 'password12', // 'password123' hashed
   }
 ];
 
@@ -20,10 +20,11 @@ export async function POST(req) {
   }
 
   // Check if the password is valid
-  const isMatch = await bcrypt.compare(password, user.password);
-//   if (!isMatch) {
-//     return new Response(JSON.stringify({ message: 'Invalid username or password' }), { status: 401 });
-//   }
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // console.log(password !== users.password,password , users.password)
+  if (users.find(user => user.password !== password)) {
+    return new Response(JSON.stringify({ message: 'Invalid username or password' }), { status: 401 });
+  }
 
   // Create a JWT token
   const token = jwt.sign({ username }, process.env.NEXT_PUBLIC_JWT_SECRET, { expiresIn: '1h' });
